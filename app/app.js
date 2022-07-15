@@ -24,7 +24,7 @@ var twilio_client = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO
 var startMessage = "Howdy! This is the party hotline!\n"
 startMessage += "Reply 'A' if free Jul 30th\n"
 startMessage += "Reply 'B' if free Aug 13th\n"
-startMessage += "Reply 'AB' if free both days!\n"
+startMessage += "Reply 'both' if free both days!\n"
 startMessage += "See you there!"
 
 
@@ -106,10 +106,15 @@ var registerPaths = function() {
             return;
         }
 
-        var from_number = req.query.From;
-        var body = req.query.Body;
+	    console.log(req.query.From);
+	    console.log(req.query.Body);
+
+        var from_number = req.query.From[0];
+        var body = req.query.Body[0];
         body.trim();
         body = body.toLowerCase();
+
+	    console.log(body)
 
         console.log(from_number, body)
 
@@ -137,7 +142,7 @@ var registerPaths = function() {
             return;
         }
 
-        if(body == 'ab') {
+        if(body == 'both') {
 			twilio_client.messages.create({        
                 messagingServiceSid: process.env.TWILIO_MSG_SID, 
                 to: from_number,
@@ -150,7 +155,7 @@ var registerPaths = function() {
 		twilio_client.messages.create({        
             messagingServiceSid: process.env.TWILIO_MSG_SID, 
             to: from_number,
-            body: 'Look, I coded this in an afternoon. You gotta say "A", "B", or "AB"!'
+            body: 'Look, I coded this in an afternoon. You gotta say "A", "B", or "both"!'
         }).done();
         res.status(200).end();
         return;        
