@@ -1,0 +1,30 @@
+{
+        "version": "0.0.1",
+        "author": "matt egan <matt.egan.me>",
+        "description": "let's find out if david is in town",
+        "scripts": {
+                "start": "node app.js"
+        },
+        "name": "isdavidin.town",
+        "dependencies": {
+                "async": "1.4.x",
+                "chokidar": "3.x.x",
+                "compression": "1.6.x",
+                "consolidate": "0.10.x",
+                "dotenv": "latest",
+                "express": "4.16.x",
+                "express-handlebars": "3.x.x",
+                "marked": "0.3.x",
+                "moment": "2.10.x",
+                "sharp": "0.27.2",
+                "twilio": "latest",
+                "underscore": "1.x.x",
+                "p5": "1.x.x",
+                "jquery": "x.x.x",
+                "jquery-form": "x.x.x",
+                "body-parser": "x.x.x"
+        },
+        "engines": {
+                "node>": ">=4.1.x"
+        }
+}

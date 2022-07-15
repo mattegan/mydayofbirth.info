@@ -1,0 +1,139 @@
+<html>
+	<head>
+		<title> Birthday </title>
+		<script src="./static/scripts/p5.min.js" type="text/javascript"></script>
+		<script src="./static/scripts/moment.js" type="text/javascript"></script>
+		<script src="./static/scripts/jquery.min.js" type="text/javascript"></script>
+		<script src="./static/scripts/jquery.form.min.js" type="text/javascript"></script>
+		<!-- <script src="./static/scripts/sketch.js" type="text/javascript"></script> -->
+
+		<script type="text/javascript">
+			$(function() {
+
+		     	// bind 'myForm' and provide a simple callback function
+		       	$('#phoneNumberForm').ajaxForm({
+		       		success: function() {
+		       			// do something reallllly fun
+		        		$('#rsvpMessage').html("check your texts!");
+		        		$('#rsvp').addClass('success');
+		        		$('#rsvpMessage').addClass('successMessage')
+		        		$("#phoneNumberForm input[type=submit]").attr("disabled", true);
+		        	},
+		        	error: function() {
+		        		// shake the box?
+		        		$('#rsvpMessage').html("whoops, try again!");
+		        		$('#rsvp').addClass('error')
+		        	}
+		       	});
+
+		       	$('#bandNameForm').ajaxForm({
+		       		success: function() {
+		       			// do something reallllly fun
+		        		$('#bandMessage').html("oooh thanks, that's a good one! do another do another!");
+		        		$('#suggestionBox').addClass('success');
+		        		$('#bandMessage').addClass('successMessage');
+		        	},
+		        	error: function() {
+	    	    		alert('oops!')
+		        	}
+		       	});
+
+		       	$('#bandPhoto').hide()
+
+		       	$('#seePhoto').mouseover(function(event) {
+		       		$('#bandPhoto').show()
+		       	})
+
+		       	$('#seePhoto').mousemove(function(event) {
+		       		$('#bandPhoto').css({top: event.pageY + 30 - $('#bandPhoto').height(), left: event.pageX + 30, position:'absolute'});
+
+		       	})
+
+		       	$('#seePhoto').mouseout(function() {
+		       		$('#bandPhoto').hide()
+		       	})
+
+		       	var mattBirthday = moment('23 Jul 1994 14:36:23 CDT');
+		       	var bennettBirthday = moment('27 Jul 1994 10:26:23 EDT');
+
+		       	var setElapsed = function(element, date) {
+		       		var dur = moment.duration(moment().diff(date))
+		       		var hours = dur.asHours()
+		       		var minutes = dur.asMinutes()  - (Math.floor(dur.asHours()) * 60)
+		       		var seconds = dur.asSeconds() -  (Math.floor(dur.asMinutes()) * 60)
+		       		var text = Math.floor(hours) + ' hr | '
+		       		text += Math.floor(minutes) + ' min | '
+		       		text += Math.floor(seconds) + ' sec'
+		       		$(element).html(text)
+		       	}
+
+	       		setElapsed('#mattTime', mattBirthday);
+	       		setElapsed('#bennettTime', bennettBirthday);
+		       	setInterval(function() {
+		       		setElapsed('#mattTime', mattBirthday);
+		       		setElapsed('#bennettTime', bennettBirthday);
+		       	}, 1000);
+
+	     	});
+		</script>
+		<link rel="stylesheet" href="./static/styles/main.css"></link>
+	</head>
+	<body>
+		<div class="header">
+			<h1>matt has been alive for:<h1> 
+			<h3 id="mattTime">X hours | Y minutes | Z seconds</h3>
+			<h1>bennett has been alive for:</h1>
+			<h3 id="bennettTime">X hours | Y minutes | Z seconds</h3>
+		</div>
+
+		<div class = "info">
+			<h3><span>party justification</span></h3>
+			<p>we're turning 28!</p>
+		</div>
+
+		<div class = "info" id ="rsvp">
+			<h3><span>RSVP and vote!</span></h3>
+			<p>summer birthdays are hard because y'all are just so <em>damn</em> busy, so we can either do Saturday <b>July 30th</b> or Saturday <b>Aug 13th</b><p>
+
+			<p><span class="yo">put your information in the boxes below and hit send to RSVP!</span></p>
+
+			<p id="rsvpMessage"></p>
+
+			<form id="phoneNumberForm" action="./phonenumber" method="POST">
+				<input type="text" name="phone_number" placeholder="phone #"></input>
+				<input type="text" name="person_name" placeholder="name"></input>
+				<input type="submit" name="submit" value="text me!"></input>
+			</form>
+		</div>
+
+		<div class = "info" id="suggestionBox">
+			<h3><span>a note from matt</span></h3>
+			<p>if you're lucky <em>(read: if we get our shit together)</em> you will witness the first performance of the band</p>
+
+			<p><span id="seePhoto">(hover for photo)</span></p>
+
+			<p>we have not picked a name, <em>this troubles us greatly</em>, <b>please suggest a name in the box</b></p>
+
+			<p>worst suggestions will be read aloud during the show</p>
+
+			<p id="bandMessage"></p>
+
+			<form id="bandNameForm" action="./suggestionbox" method="POST">
+				<input type="text" name="band_name" placeholder="make it good!"></input>
+				<input type="text" name="your_name" placeholder="your name (optional)"></input>
+				<input type="submit" name="submit" value="submit"></input>
+			</form>			
+		</div>
+
+		<img id="bandPhoto" src="./static/images/band.jpg" width="1200" height="auto"></img>
+
+		<div class = "info">
+			<h3><span>basic info</span></h3>
+			<p><b>Address:</b> 1151 Kirkham Street</p>
+			<p><b>Time:</b> Like 7pm</p>
+			<p><b>Attire:</b> Something spiffy<p>
+			<p><b>Entertainment:</b> Loud noises in our garage</p>
+		</div>
+
+	</body>
+</html>
