@@ -48,7 +48,7 @@ var setupApp = function() {
     }));
     app.set('view engine', 'html');
 
-	app.use(express.json());       // to support JSON-encoded bodies
+	app.use(express.json()); // to support JSON-encoded bodies
 	app.use(express.urlencoded({extended: true})); // to support URL-encoded bodies
 }
 
@@ -61,13 +61,17 @@ var registerPaths = function() {
     	var phoneNumber = req.body.phone_number;
     	var personName = req.body.person_name;
 
-    	res.status(200).send();
-
     	twilio_client.lookups.v1.phoneNumbers(phoneNumber).fetch()
-         	.then(function(response) {
-         		var trueNumber = response.phoneNumber;
+            .then(function(response) {
+                if(response.phoneNumber == undefined) {
+                    throw err;
+                    return;
+                }
 
+         		var trueNumber = response.phoneNumber;
+                console.log(response)
          		// bail out quick!
+                console.log('sent 200')
          		res.status(200).send();
 
          		// log the number for our records
@@ -84,7 +88,7 @@ var registerPaths = function() {
          	}).catch(function(error) {
          		console.log('error!')
          		res.status(300).send();
-        });
+            });
     })
 
     app.post('/suggestionbox', function(req, res) {
@@ -174,84 +178,3 @@ var start = function() {
 }
 
 setup();
-
-// app.get('/incoming', function(req, res) {
-
-//         if(! (_.has(req.query, 'From') && _.has(req.query, 'Body'))) {
-//             console.log("didn't get what I needed")
-//             res.status(200).end()
-//             return;
-//         }
-
-//         var from_number = req.query.From;
-//         var body = req.query.Body;
-//         body.trim();
-
-//         console.log(from_number, body)
-
-//         // make sure it's from a number in our whitelist
-//         if(_.contains(whitelist, from_number)) {
-//             // check the message
-//             // looking for... (here) or (gone | away)
-//             // can also give "msg:<some message>"
-//             // can also give "help"
-//             if(body.toLowerCase() == 'commands') {
-//                 twilio_client.messages.create({        
-//                     messagingServiceSid: process.env.TWILIO_MSG_SID, 
-//                     to: from_number,
-//                     body: 'Say "here" or "away", or "msg:<your message>"'
-//                 }).done();
-//                 res.status(200).end();
-//                 return;
-//             }
-
-//             if(body.toLowerCase() == 'here') {
-//                 fs.writeFileSync(__dirname + '/status.txt', 'h');
-//                 twilio_client.messages.create({        
-//                     messagingServiceSid: process.env.TWILIO_MSG_SID, 
-//                     to: from_number,
-//                     body: 'Howdy! Enjoy your stay!'
-//                 }).done();
-//                 res.status(200).end();
-//                 return;
-//             }
-
-//             if(body.toLowerCase() == 'away') {
-//                 fs.writeFileSync(__dirname + '/status.txt', 'a');
-//                 twilio_client.messages.create({        
-//                     messagingServiceSid: process.env.TWILIO_MSG_SID, 
-//                     to: from_number,
-//                     body: 'See you next time!'
-//                 }).done();
-//                 res.status(200).end();
-//                 return;
-//             }
-
-//             if(body.toLowerCase().startsWith('msg:')) {
-//                 fs.writeFileSync(__dirname + '/msg.txt', body.substring(4))
-//                 twilio_client.messages.create({        
-//                     messagingServiceSid: process.env.TWILIO_MSG_SID, 
-//                     to: from_number,
-//                     body: 'Got it, loud and clear!'
-//                 }).done();
-//                 res.status(200).end();
-//                 return;
-//             }
-
-//             // if we got here then we didn't do something!
-//             twilio_client.messages.create({        
-//                 messagingServiceSid: process.env.TWILIO_MSG_SID, 
-//                 to: from_number,
-//                 body: 'Hmm, didn\'t get that! Say "commands" for help.'
-//             }).done();
-            
-//         } else {
-//             twilio_client.messages.create({        
-//                 messagingServiceSid: process.env.TWILIO_MSG_SID, 
-//                 to: from_number,
-//                 body: 'Sorry, there\'s only one David, and it\'s not you. Better luck in your next life!'
-//             }).done();
-//             res.status(200).end();
-//         }
-        
-//     })

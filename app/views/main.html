@@ -12,16 +12,17 @@
 
 		     	// bind 'myForm' and provide a simple callback function
 		       	$('#phoneNumberForm').ajaxForm({
-		       		success: function() {
+		       		success: function(info) {
 		       			// do something reallllly fun
 		        		$('#rsvpMessage').html("check your texts!");
 		        		$('#rsvp').addClass('success');
 		        		$('#rsvpMessage').addClass('successMessage')
 		        		$("#phoneNumberForm input[type=submit]").attr("disabled", true);
 		        	},
-		        	error: function() {
+		        	error: function(info) {
 		        		// shake the box?
 		        		$('#rsvpMessage').html("whoops, try again!");
+		        		$('#rsvpMessage').addClass('failMessage')
 		        		$('#rsvp').addClass('error')
 		        	}
 		       	});
@@ -44,9 +45,12 @@
 		       		$('#bandPhoto').show()
 		       	})
 
+				// $('#seePhoto').touchstart(function(event) {
+		  //      		$('#bandPhoto').show()
+		  //      	})
+
 		       	$('#seePhoto').mousemove(function(event) {
 		       		$('#bandPhoto').css({top: event.pageY + 30 - $('#bandPhoto').height(), left: event.pageX + 30, position:'absolute'});
-
 		       	})
 
 		       	$('#seePhoto').mouseout(function() {
@@ -68,10 +72,8 @@
 		       	}
 
 	       		setElapsed('#mattTime', mattBirthday);
-	       		setElapsed('#bennettTime', bennettBirthday);
 		       	setInterval(function() {
 		       		setElapsed('#mattTime', mattBirthday);
-		       		setElapsed('#bennettTime', bennettBirthday);
 		       	}, 1000);
 
 	     	});
@@ -79,16 +81,10 @@
 		<link rel="stylesheet" href="./static/styles/main.css"></link>
 	</head>
 	<body>
-		<div class="header">
-			<h1>matt has been alive for:<h1> 
-			<h3 id="mattTime">X hours | Y minutes | Z seconds</h3>
-			<h1>bennett has been alive for:</h1>
-			<h3 id="bennettTime">X hours | Y minutes | Z seconds</h3>
-		</div>
 
 		<div class = "info">
 			<h3><span>party justification</span></h3>
-			<p>we're turning 28!</p>
+			<p>I'm turning 28!</p>
 		</div>
 
 		<div class = "info" id ="rsvp">
@@ -101,26 +97,26 @@
 
 			<form id="phoneNumberForm" action="./phonenumber" method="POST">
 				<input type="text" name="phone_number" placeholder="phone #"></input>
-				<input type="text" name="person_name" placeholder="name"></input>
+				<input type="text" name="person_name" placeholder="name (optional)"></input>
 				<input type="submit" name="submit" value="text me!"></input>
 			</form>
 		</div>
 
 		<div class = "info" id="suggestionBox">
 			<h3><span>a note from matt</span></h3>
-			<p>if you're lucky <em>(read: if we get our shit together)</em> you will witness the first performance of the band</p>
+			<p>if you're lucky <em>(read: if we get our shit together)</em> you will witness the first performance of "the band"</p>
 
-			<p><span id="seePhoto">(hover for photo)</span></p>
+			<p><a href="./static/images/band.jpg"><span id="seePhoto">(hover or click for photo)</span></a></p>
 
 			<p>we have not picked a name, <em>this troubles us greatly</em>, <b>please suggest a name in the box</b></p>
 
-			<p>worst suggestions will be read aloud during the show</p>
+			<p>your worst suggestions will be read aloud during the show</p>
 
 			<p id="bandMessage"></p>
 
 			<form id="bandNameForm" action="./suggestionbox" method="POST">
 				<input type="text" name="band_name" placeholder="make it good!"></input>
-				<input type="text" name="your_name" placeholder="your name (optional)"></input>
+				<input type="text" name="your_name" placeholder="name (optional)"></input>
 				<input type="submit" name="submit" value="submit"></input>
 			</form>			
 		</div>
@@ -133,6 +129,11 @@
 			<p><b>Time:</b> Like 7pm</p>
 			<p><b>Attire:</b> Something spiffy<p>
 			<p><b>Entertainment:</b> Loud noises in our garage</p>
+		</div>
+
+		<div class="info">
+			<h3><span>matt has been alive for:</span></h3>
+			<p id="mattTime">X hours | Y minutes | Z seconds</p>
 		</div>
 
 	</body>
